@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 // Single-file React landing page (Canvas preview ready)
@@ -8,18 +8,11 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 export default function MediBridgeGlobal() {
   const [lang, setLang] = useState("zh");
   const [showCountries, setShowCountries] = useState(false); // default hidden
-
-  // --- Contact form state (controlled) ---
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    country: "",
-    need: "",
-    twov: false,
-    hp: "", // honeypot
-  });
   const [submitting, setSubmitting] = useState(false);
+
+  // --- Contact form refs (uncontrolled) ---
+  const formRef = useRef(null);
+  const twovRef = useRef(null);
 
   // Helper: safely coerce to array for .map
   const A = (v) => (Array.isArray(v) ? v : []);
@@ -325,10 +318,21 @@ export default function MediBridgeGlobal() {
 
   // --- Submit helper ---
   const submitForm = async () => {
-    if (!form.name || !form.email) return false;
-    if (form.hp) return true; // honeypot filled -> treat as OK without sending
+    if (!formRef.current) return false;
+    const formData = new FormData(formRef.current);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const phone = formData.get('phone');
+    const country = formData.get('country');
+    const need = formData.get('need');
+    const hp = formData.get('hp');
+    const twov = twovRef.current?.checked || false;
+
+    if (!name || !email) return false;
+    if (hp) return true; // honeypot filled -> treat as OK without sending
+
     const payload = {
-      ...form,
+      name, email, phone, country, need, twov, hp,
       lang,
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
       url: typeof location !== 'undefined' ? location.href : 'unknown',
@@ -666,34 +670,39 @@ export default function MediBridgeGlobal() {
         <p className="text-sm text-slate-600 mb-6">{t.contactBlurb}</p>
         <Card>
           <form
+            ref={formRef}
+            noValidate
             onSubmit={async (e) => {
               e.preventDefault();
-              if (!form.name || !form.email) return alert(lang === 'zh' ? '请填写姓名和邮箱' : 'Please fill in name and email');
+              const formData = new FormData(e.target);
+              const name = formData.get('name');
+              const email = formData.get('email');
+              if (!name || !email) return alert(lang === 'zh' ? '请填写姓名和邮箱' : 'Please fill in name and email');
               setSubmitting(true);
               const ok = await submitForm();
               setSubmitting(false);
               if (ok) {
                 alert(t.submitOk);
-                setForm({ name: '', email: '', phone: '', country: '', need: '', twov: false, hp: '' });
+                e.target.reset();
               } else {
                 alert(t.submitFail);
               }
             }}
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
-            <input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} required placeholder={t.form?.name || 'Name'} className="border rounded-xl p-3 w-full" />
-            <input value={form.email} onChange={(e)=>setForm({...form, email:e.target.value})} required type="email" placeholder={t.form?.email || 'Email'} className="border rounded-xl p-3 w-full" />
-            <input value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} placeholder={t.form?.phone || 'Phone'} className="border rounded-xl p-3 w-full" />
-            <input value={form.country} onChange={(e)=>setForm({...form, country:e.target.value})} placeholder={t.form?.country || 'Country/Region'} className="border rounded-xl p-3 w-full" />
+            <input name="name" onKeyDown={(e)=>{if(e.key==='Enter')e.preventDefault()}} placeholder={t.form?.name || 'Name'} autoComplete="name" className="border rounded-xl p-3 w-full" />
+            <input name="email" onKeyDown={(e)=>{if(e.key==='Enter')e.preventDefault()}} type="email" placeholder={t.form?.email || 'Email'} autoComplete="email" className="border rounded-xl p-3 w-full" />
+            <input name="phone" onKeyDown={(e)=>{if(e.key==='Enter')e.preventDefault()}} placeholder={t.form?.phone || 'Phone'} autoComplete="tel" className="border rounded-xl p-3 w-full" />
+            <input name="country" onKeyDown={(e)=>{if(e.key==='Enter')e.preventDefault()}} placeholder={t.form?.country || 'Country/Region'} autoComplete="country" className="border rounded-xl p-3 w-full" />
             {/* Honeypot */}
-            <input value={form.hp} onChange={(e)=>setForm({...form, hp:e.target.value})} tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+            <input name="hp" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
             <label className="flex items-center gap-2 text-sm md:col-span-2">
-              <input id="twov-checkbox" type="checkbox" className="h-4 w-4" checked={form.twov} onChange={(e)=>setForm({...form, twov:e.target.checked})} />
+              <input ref={twovRef} id="twov-checkbox" type="checkbox" className="h-4 w-4" />
               <span>{t.form?.twov || 'Request 240h TWOV assessment'}</span>
             </label>
-            <textarea value={form.need} onChange={(e)=>setForm({...form, need:e.target.value})} placeholder={t.form?.need || 'Brief needs'} className="md:col-span-2 border rounded-xl p-3 w-full h-28" />
+            <textarea name="need" placeholder={t.form?.need || 'Brief needs'} className="md:col-span-2 border rounded-xl p-3 w-full h-28" />
             <div className="md:col-span-2">
-              <button disabled={submitting} className="w-full md:w-auto rounded-xl px-6 py-3 bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed">
+              <button type="submit" disabled={submitting} className="w-full md:w-auto rounded-xl px-6 py-3 bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed">
                 {submitting ? (lang === 'zh' ? '提交中…' : 'Submitting…') : (t.form?.submit || 'Submit')}
               </button>
             </div>
