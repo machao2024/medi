@@ -93,6 +93,7 @@ pnpm preview  # 或: npm run preview / yarn preview
 
 ### MailChannels 设置
 
+
 Cloudflare Pages 默认集成 MailChannels。为避免邮件被退回：
 - 向 MailChannels 验证你的发件域名
 - `SITE_EMAIL_FROM` 使用域名邮箱（不要用免费邮箱提供商）
