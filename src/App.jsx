@@ -1110,18 +1110,28 @@ export default function MediBridgeGlobal() {
                 </svg>
                 <div>
                   <div className="text-sm font-medium">{t.contactMethods?.whatsapp || "WhatsApp"}</div>
-                  <a href="https://wa.me/8600000000000" className="text-sm text-slate-600 hover:underline">+86 000-0000-0000</a>
+                  <a href="https://wa.me/8613120381582" className="text-sm text-slate-600 hover:underline">+86 131 2038 1582</a>
                 </div>
               </div>
             </Card>
             <Card>
-              <div className="flex items-center gap-3">
-                <svg className="w-6 h-6 text-green-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.49.49 0 01.176-.553C23.462 18.468 24 16.98 24 15.407c0-3.374-3.056-6.1-7.062-6.449v-.1z"/>
-                </svg>
-                <div>
-                  <div className="text-sm font-medium">{t.contactMethods?.wechat || "WeChat"}</div>
-                  <span className="text-sm text-slate-600">MediBridge_Global</span>
+              <div className="relative group">
+                <div className="flex items-center gap-3 cursor-pointer">
+                  <svg className="w-6 h-6 text-green-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.49.49 0 01.176-.553C23.462 18.468 24 16.98 24 15.407c0-3.374-3.056-6.1-7.062-6.449v-.1z"/>
+                  </svg>
+                  <div>
+                    <div className="text-sm font-medium">{t.contactMethods?.wechat || "WeChat"}</div>
+                    <span className="text-sm text-slate-600">{lang === 'zh' ? '鼠标悬停查看二维码' : 'Hover to see QR code'}</span>
+                  </div>
+                </div>
+                {/* WeChat QR Code Popup */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
+                  <div className="bg-white rounded-xl shadow-lg p-3 border">
+                    <img src="/wx-qrcode.png" alt="WeChat QR Code" className="w-40 h-40 object-contain" />
+                    <p className="text-xs text-center text-slate-500 mt-2">{lang === 'zh' ? '扫码添加微信' : 'Scan to add WeChat'}</p>
+                  </div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white"></div>
                 </div>
               </div>
             </Card>
@@ -1135,7 +1145,7 @@ export default function MediBridgeGlobal() {
       <footer className="border-t bg-white/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-sm flex flex-col md:flex-row items-center justify-between gap-3">
           <div>{t.footer}</div>
-          <div className="text-slate-500">Email: machao2024.996@gmail.com · WhatsApp: +86 000-0000-0000 · WeChat: MediBridge_Global</div>
+          <div className="text-slate-500">Email: machao2024.996@gmail.com · WhatsApp: +86 131 2038 1582</div>
         </div>
       </footer>
 
