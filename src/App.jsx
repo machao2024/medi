@@ -1128,7 +1128,7 @@ export default function MediBridgeGlobal() {
                 {/* WeChat QR Code Popup */}
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
                   <div className="bg-white rounded-xl shadow-lg p-4 border">
-                    <img src="/wx-qrcode.png" alt="WeChat QR Code" className="w-56 h-56 object-contain" />
+                    <img src="/wx-qrcode.png" alt="WeChat QR Code" style={{width: '200px', height: '200px'}} className="object-cover" />
                     <p className="text-sm text-center text-slate-500 mt-2">{lang === 'zh' ? '扫码添加微信' : 'Scan to add WeChat'}</p>
                   </div>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white"></div>
