@@ -1110,7 +1110,7 @@ export default function MediBridgeGlobal() {
                 </svg>
                 <div>
                   <div className="text-sm font-medium">{t.contactMethods?.whatsapp || "WhatsApp"}</div>
-                  <a href="https://wa.me/8613120381582" className="text-sm text-slate-600 hover:underline">+86 131 2038 1582</a>
+                  <a href="https://wa.me/8613120381582" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600 hover:underline">+86 131 2038 1582</a>
                 </div>
               </div>
             </Card>
@@ -1127,9 +1127,9 @@ export default function MediBridgeGlobal() {
                 </div>
                 {/* WeChat QR Code Popup */}
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
-                  <div className="bg-white rounded-xl shadow-lg p-3 border">
-                    <img src="/wx-qrcode.png" alt="WeChat QR Code" className="w-40 h-40 object-contain" />
-                    <p className="text-xs text-center text-slate-500 mt-2">{lang === 'zh' ? '扫码添加微信' : 'Scan to add WeChat'}</p>
+                  <div className="bg-white rounded-xl shadow-lg p-4 border">
+                    <img src="/wx-qrcode.png" alt="WeChat QR Code" className="w-56 h-56 object-contain" />
+                    <p className="text-sm text-center text-slate-500 mt-2">{lang === 'zh' ? '扫码添加微信' : 'Scan to add WeChat'}</p>
                   </div>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white"></div>
                 </div>
